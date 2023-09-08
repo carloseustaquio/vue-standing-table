@@ -69,7 +69,7 @@ export default {
   height: clamp(300px, 50vw, 700px);
 
   border-radius: 50%;
-  animation: celebrate-winner 5s ease-in-out; // 5s is the animation timing
+  animation: celebrate-winner 5s linear; // 5s is the animation timing
 
   background: $primary-gradient;
   color: white;
