@@ -56,6 +56,14 @@
             </tr>
           </tbody>
         </table>
+        <div class="flex align-center justify-center p-4">
+          <PrimaryButton 
+            :disabled="!hasMorePages || isLoadingNextPage" 
+            @click="loadNextPage"
+          >
+            {{ isLoadingNextPage ? 'Loading...' : hasMorePages ? 'Load More' : 'No more items :)' }}
+          </PrimaryButton>
+      </div>
       </div>
     </div>
   </div>
@@ -63,6 +71,7 @@
 
 <script>
 import mockApi from '../mock-api/index.js';
+import PrimaryButton from './PrimaryButton.vue'
 
 const matchResult = {
   W: {
@@ -80,21 +89,26 @@ const matchResult = {
 };
 
 export default {
+  components: {
+    PrimaryButton
+  },
 	data() {
 		return {
 			data: [],
       isLoading: false,
+      itemsOnFirstLoad: 5,
+      hasMorePages: true,
+      isLoadingNextPage: false,
 		};
 	},
 	async created() {
     this.isLoading = true;
-		const apiData = await mockApi();
-		this.data = apiData.table;
+		await this.getNextStandingData(this.itemsOnFirstLoad);
     this.isLoading = false;
 	},
   computed: {
     tableData: function() {
-      const skeletonData = Array(10).fill({}); 
+      const skeletonData = Array(this.itemsOnFirstLoad).fill({}); 
       return this.isLoading ? skeletonData : this.data
     },
   },
@@ -105,6 +119,17 @@ export default {
     getResultBadgeAlt(result) {
       return matchResult[result].alt;
     },
+    async getNextStandingData(size) {
+      const nextPageData = await mockApi(this.data.length, size);
+
+      this.data = [...this.data, ...nextPageData.table];
+      this.hasMorePages = nextPageData.hasMorePages;
+    },
+    async loadNextPage() {
+      this.isLoadingNextPage = true;
+      await this.getNextStandingData(3)
+      this.isLoadingNextPage = false;
+    }
   },
 };
 </script>
