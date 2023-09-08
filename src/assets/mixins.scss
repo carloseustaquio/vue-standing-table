@@ -1,0 +1,23 @@
+@mixin solid-box-shadow-offset($shadow-size: 16px) {
+	box-shadow: -$shadow-size $shadow-size 0px $primary-color, 0px 0px $shadow-size rgba(0, 0, 0, 0.1);
+
+  &::before {
+		content: '';
+		position: absolute;
+		left: -$shadow-size;
+		top: 0px;
+		width: $shadow-size;
+    height: $shadow-size;
+    background: linear-gradient(to bottom right, $page-background-color 0%, $page-background-color 50%, $primary-color 50%, $primary-color 100%);
+  }
+
+	&::after {
+		content: '';
+		position: absolute;
+		right: 0;
+		bottom: -$shadow-size;
+		width: $shadow-size;
+    height: $shadow-size;
+    background: linear-gradient(to top left, $page-background-color 0%, $page-background-color 50%, $primary-color 50%, $primary-color 100%);
+	}
+}

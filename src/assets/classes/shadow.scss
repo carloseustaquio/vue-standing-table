@@ -1,0 +1,5 @@
+// prints box shadow with bottom right 3d effect
+.box-3d-shadow-default {
+	position: relative;
+	@include solid-box-shadow-offset();
+}
