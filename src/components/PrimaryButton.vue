@@ -1,9 +1,5 @@
 <template>
-  <button
-    class="fs-1 bg-primary c-white pt-2 pb-2 pl-4 pr-4"
-    @click="handleClick"
-    :disabled="isDisabled"
-  >
+  <button class="fs-1 bg-primary c-white pt-2 pb-2 pl-4 pr-4" @click="handleClick" :disabled="isDisabled">
     <slot></slot>
   </button>
 </template>

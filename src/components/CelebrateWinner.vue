@@ -1,18 +1,9 @@
 <template>
-  <div 
-    v-if="winner"
-    class="fixed inset-0 flex flex-column align-center justify-center"
-  >
-    <div class="bg-white flex flex-column align-center justify-center animation p-3" :class="{animate: animationOn}">
+  <div v-if="winner" class="fixed inset-0 flex flex-column align-center justify-center">
+    <div class="bg-white flex flex-column align-center justify-center animation p-3" :class="{ animate: animationOn }">
       <h1 class="text-center fs-7 fs-sm-7">🏆 Celebrate the Winner! 🏆</h1>
       <div class="flex flex-column align-center text-center mt-5">
-        <img 
-          v-if="winner.strTeamBadge" 
-          :src="winner.strTeamBadge" 
-          alt="Team Badge" 
-          width="50px" 
-          height="50px" 
-        /> 
+        <img v-if="winner.strTeamBadge" :src="winner.strTeamBadge" alt="Team Badge" width="50px" height="50px" />
         <h1 class="p-2 fs-7 fs-sm-7">{{ winner.strTeam }}</h1>
       </div>
     </div>
@@ -56,19 +47,23 @@ export default {
     transform: scale(0);
     opacity: 0;
   }
+
   20% {
     transform: scale(1);
     opacity: 1;
   }
+
   80% {
     transform: scale(1.5);
     opacity: 1;
   }
+
   100% {
     transform: scale(10);
     opacity: 0;
   }
 }
+
 .animation {
   width: clamp(300px, 50vw, 700px);
   height: clamp(300px, 50vw, 700px);
