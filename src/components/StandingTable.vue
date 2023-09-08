@@ -19,30 +19,20 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in tableData" :key="index" class="h-7" :class="{'skeleton': isLoading}">
+            <tr v-for="(item, index) in tableData" :key="index" class="h-7"
+              :class="{ 'skeleton': isLoading, 'trophy-cursor': index === 0 && !isLoading }"
+              @click="index === 0 ? $emit('onCelebrate', item) : null">
               <td class="text-center p-2">{{ item.intRank }}</td>
               <td>
                 <div v-if="!isLoading" class="flex align-center p-2 w-full">
-                  <img 
-                    v-if="item.strTeamBadge" 
-                    :src="item.strTeamBadge" 
-                    alt="Team Badge" 
-                    width="30px" 
-                    class="mr-3"
-                  /> 
+                  <img v-if="item.strTeamBadge" :src="item.strTeamBadge" alt="Team Badge" width="30px" class="mr-3" />
                   {{ item.strTeam }}
                 </div>
               </td>
               <td class="text-center hide-max-md p-2">
                 <div>
-                  <img
-                    v-for="(form, index) in item.strForm?.split('')"
-                    :key="index"
-                    :src="getResultBadge(form)"
-                    :alt="getResultBadgeAlt(form)"
-                    width="20px"
-                    class="ml-1"
-                  />
+                  <img v-for="(form, index) in item.strForm?.split('')" :key="index" :src="getResultBadge(form)"
+                    :alt="getResultBadgeAlt(form)" width="20px" class="ml-1" />
                 </div>
               </td>
               <td class="text-center p-2">{{ item.intPlayed }}</td>
@@ -57,13 +47,10 @@
           </tbody>
         </table>
         <div class="flex align-center justify-center p-4">
-          <PrimaryButton 
-            :disabled="!hasMorePages || isLoadingNextPage" 
-            @click="loadNextPage"
-          >
+          <PrimaryButton :disabled="!hasMorePages || isLoadingNextPage" @click="loadNextPage">
             {{ isLoadingNextPage ? 'Loading...' : hasMorePages ? 'Load More' : 'No more items :)' }}
           </PrimaryButton>
-      </div>
+        </div>
       </div>
     </div>
   </div>
@@ -72,43 +59,35 @@
 <script>
 import mockApi from '../mock-api/index.js';
 import PrimaryButton from './PrimaryButton.vue'
+import { winIcon, drawIcon, lossIcon } from '../icons/icons'
 
 const matchResult = {
-  W: {
-    img: 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4IiB2aWV3Qm94PSIwIDAgMTYgMTYiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iTG9zcyI+CiAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwiIGZpbGw9IiNFQTQzMzUiIGN4PSI4IiBjeT0iOCIgcj0iOCI+PC9jaXJjbGU+CiAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJQYXRoIiBmaWxsPSIjRkZGRkZGIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4LjAwMDAwMCwgOC4wMDAwMDApIHJvdGF0ZSgtMzE1LjAwMDAwMCkgdHJhbnNsYXRlKC04LjAwMDAwMCwgLTguMDAwMDAwKSAiIHBvaW50cz0iMTIgOC44IDguOCA4LjggOC44IDEyIDcuMiAxMiA3LjIgOC44IDQgOC44IDQgNy4yIDcuMiA3LjIgNy4yIDQgOC44IDQgOC44IDcuMiAxMiA3LjIiPjwvcG9seWdvbj4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPgo=',
-    alt: 'Win',
-  },
-  D: {
-    img: 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4IiB2aWV3Qm94PSIwIDAgMTYgMTYiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iRHJhdyI+CiAgICAgICAgICAgIDxjaXJjbGUgaWQ9Ik92YWwiIGZpbGw9IiM5QUEwQTYiIGN4PSI4IiBjeT0iOCIgcj0iOCI+PC9jaXJjbGU+CiAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJQYXRoIiBmaWxsPSIjRkZGRkZGIiBwb2ludHM9IjUgNyAxMSA3IDExIDkgNSA5Ij48L3BvbHlnb24+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4K',
-    alt: 'Draw',
-  },
-  L: {
-    img: 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4IiB2aWV3Qm94PSIwIDAgMTYgMTYiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iV2luIj4KICAgICAgICAgICAgPGNpcmNsZSBpZD0iT3ZhbCIgZmlsbD0iIzNBQTc1NyIgY3g9IjgiIGN5PSI4IiByPSI4Ij48L2NpcmNsZT4KICAgICAgICAgICAgPHBvbHlnb24gaWQ9IlBhdGgiIGZpbGw9IiNGRkZGRkYiIGZpbGwtcnVsZT0ibm9uemVybyIgcG9pbnRzPSI2LjQgOS43NiA0LjMyIDcuNjggMy4yIDguOCA2LjQgMTIgMTIuOCA1LjYgMTEuNjggNC40OCI+PC9wb2x5Z29uPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+Cg==',
-    alt: 'Loss',
-  },
+  W: { img: winIcon, alt: 'Win', },
+  D: { img: drawIcon, alt: 'Draw', },
+  L: { img: lossIcon, alt: 'Loss', },
 };
 
 export default {
   components: {
     PrimaryButton
   },
-	data() {
-		return {
-			data: [],
+  data() {
+    return {
+      data: [],
       isLoading: false,
       itemsOnFirstLoad: 5,
       hasMorePages: true,
       isLoadingNextPage: false,
-		};
-	},
-	async created() {
+    };
+  },
+  async created() {
     this.isLoading = true;
-		await this.getNextStandingData(this.itemsOnFirstLoad);
+    await this.getNextStandingData(this.itemsOnFirstLoad);
     this.isLoading = false;
-	},
+  },
   computed: {
-    tableData: function() {
-      const skeletonData = Array(this.itemsOnFirstLoad).fill({}); 
+    tableData: function () {
+      const skeletonData = Array(this.itemsOnFirstLoad).fill({});
       return this.isLoading ? skeletonData : this.data
     },
   },
@@ -129,6 +108,9 @@ export default {
       this.isLoadingNextPage = true;
       await this.getNextStandingData(3)
       this.isLoadingNextPage = false;
+    },
+    celebrate() {
+      alert('You are the champion!');
     }
   },
 };
@@ -143,7 +125,7 @@ table {
       background-color: $grey-100;
     }
 
-    &:hover:not(.skeleton)  {
+    &:hover:not(.skeleton) {
       background: $primary-gradient;
       color: $white;
     }
