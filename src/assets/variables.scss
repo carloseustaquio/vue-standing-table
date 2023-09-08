@@ -3,6 +3,18 @@ $primary-color: #37003c;
 $white: #ffffff;
 $page-background-color: #efefef;
 
+$grey-100: #f8f9fa;
+$grey-200: #e9ecef;
+$grey-300: #dee2e6;
+$grey-400: #ced4da;
+$grey-500: #adb5bd;
+$grey-600: #6c757d;
+$grey-700: #495057;
+$grey-800: #343a40;
+$grey-900: #212529;
+
+$primary-gradient: linear-gradient(98.5deg,#05f0ff -46.16%,#7367ff 42.64%,#963cff 70.3%);
+
 // Space Sizing
 $s-1: 4px;
 $s-2: 8px;
@@ -14,3 +26,10 @@ $s-7: 48px;
 $s-8: 56px;
 $s-9: 64px;
 $s-10: 72px;
+
+// Breakpoints
+$breakpoint-s: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1400px;

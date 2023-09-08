@@ -1,5 +1,5 @@
 <template>
-	<footer class="full-width bg-primary"></footer>
+	<footer class="w-full bg-primary"></footer>
 </template>
 
 <script>

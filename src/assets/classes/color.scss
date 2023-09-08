@@ -1,11 +1,8 @@
-.bg-page {
-	background-color: $page-background-color;
-}
+// Background colors
+.bg-page { background-color: $page-background-color }
+.bg-white {	background-color: $white}
+.bg-primary {	background-color: $primary-color}
 
-.bg-white {
-	background-color: $white;
-}
-
-.bg-primary {
-	background-color: $primary-color;
-}
+// Colors
+.c-primary { color: $primary-color }
+.c-white { color: $white }

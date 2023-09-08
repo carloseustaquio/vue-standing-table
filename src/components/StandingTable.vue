@@ -1,49 +1,62 @@
 <template>
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Club</th>
-        <th>Form</th>
-        <th>GP</th>
-        <th>W</th>
-        <th>D</th>
-        <th>L</th>
-        <th>GF</th>
-        <th>GA</th>
-        <th>GD</th>
-        <th>Pts</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(item, index) in data" :key="index" >
-        <td >{{ item.intRank }}</td>
-        <td >
-          <div>
-            <img v-if="item.strTeamBadge" :src="item.strTeamBadge" alt="Team Badge" /> {{ item.strTeam }}
-          </div>
-        </td>
-        <td >
-          <div>
-            <img
-              v-for="(form, index) in item.strForm?.split('')"
-              :key="index"
-              :src="getResultBadge(form)"
-              :alt="getResultBadgeAlt(form)"
-            />
-          </div>
-        </td>
-        <td>{{ item.intPlayed }}</td>
-        <td>{{ item.intWin }}</td>
-        <td>{{ item.intDraw }}</td>
-        <td>{{ item.intLoss }}</td>
-        <td>{{ item.intGoalsFor }}</td>
-        <td>{{ item.intGoalsAgainst }}</td>
-        <td>{{ item.intGoalDifference }}</td>
-        <td>{{ item.intPoints }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="box-3d-shadow-default page-content-width flex-grow">
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="bg-primary c-white">
+            <th class="p-2">#</th>
+            <th class="p-2 text-left">Club</th>
+            <th class="p-2 w-200 hide-max-md">Form</th>
+            <th class="p-2">GP</th>
+            <th class="p-2">W</th>
+            <th class="p-2">D</th>
+            <th class="p-2">L</th>
+            <th class="p-2">GF</th>
+            <th class="p-2">GA</th>
+            <th class="p-2">GD</th>
+            <th class="p-2">Pts</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in data" :key="index" class="h-7">
+            <td class="text-center p-2">{{ item.intRank }}</td>
+            <td>
+              <div class="flex align-center p-2 w-full">
+                <img 
+                  v-if="item.strTeamBadge" 
+                  :src="item.strTeamBadge" 
+                  alt="Team Badge" 
+                  width="30px" 
+                  class="mr-3"
+                /> 
+                {{ item.strTeam }}
+              </div>
+            </td>
+            <td class="text-center hide-max-md p-2">
+              <div>
+                <img
+                  v-for="(form, index) in item.strForm?.split('')"
+                  :key="index"
+                  :src="getResultBadge(form)"
+                  :alt="getResultBadgeAlt(form)"
+                  width="20px"
+                  class="ml-1"
+                />
+              </div>
+            </td>
+            <td class="text-center p-2">{{ item.intPlayed }}</td>
+            <td class="text-center p-2">{{ item.intWin }}</td>
+            <td class="text-center p-2">{{ item.intDraw }}</td>
+            <td class="text-center p-2">{{ item.intLoss }}</td>
+            <td class="text-center p-2">{{ item.intGoalsFor }}</td>
+            <td class="text-center p-2">{{ item.intGoalsAgainst }}</td>
+            <td class="text-center p-2">{{ item.intGoalDifference }}</td>
+            <td class="text-center p-2">{{ item.intPoints }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -84,3 +97,20 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+table {
+  border-collapse: collapse;
+
+  tbody tr {
+    &:nth-child(even) {
+      background-color: $grey-100;
+    }
+
+    &:hover {
+      background: $primary-gradient;
+      color: $white;
+    }
+  }
+}
+</style>

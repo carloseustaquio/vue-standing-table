@@ -1,9 +1,7 @@
 <template>
-  <div id="app" class="flex flex-column align-center bg-page full-height gap-10 pt-6">
+  <div id="app" class="min-h-vh flex flex-column align-center bg-page h-full gap-10 pt-6">
     <MainHeader />
-    <div class="flex-grow">
-      <StandingTable />
-    </div>
+    <StandingTable />
     <MainFooter />
   </div>
 </template>
@@ -25,6 +23,6 @@ export default {
 
 <style lang="scss">
 #app {
-  min-height: 100vh;
+  // can't remove this block for some reason
 }
 </style>
