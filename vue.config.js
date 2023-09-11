@@ -10,6 +10,6 @@ module.exports = defineConfig({
   },
   // Deployment to Github Pages
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/vue-standing-table'
+    ? '/vue-standing-table/'
     : '/'
 })
