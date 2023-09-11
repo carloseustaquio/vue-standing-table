@@ -4,6 +4,7 @@
 
 <img width="1728" alt="image" src="https://github.com/carloseustaquio/vue-standing-table/assets/43277022/5cffc32f-bc77-4666-989b-c5198b401d52">
 
+### Running the project
 ```
 yarn install // Project setup
 yarn serve // Compiles and hot-reloads for development
